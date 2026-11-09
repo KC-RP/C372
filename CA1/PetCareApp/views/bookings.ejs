@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookings</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="container mt-5">
+    <h2 class="mb-4">My Bookings</h2>
+    <% errors.forEach(error => { %><div class="alert alert-danger"><%= error %></div><% }); %>
+    <% messages.forEach(message => { %><div class="alert alert-success"><%= message %></div><% }); %>
+    <a href="/services" class="btn btn-primary mb-3">Browse services</a>
+
+    <% if (bookings.length === 0) { %>
+      <div class="alert alert-info">You have no bookings yet.</div>
+    <% } else { %>
+      <% bookings.forEach(booking => { %>
+        <section class="card mb-3">
+          <div class="card-header d-flex justify-content-between">
+            <strong>Booking #<%= booking.booking_id %></strong>
+            <span class="badge text-bg-secondary"><%= booking.status %></span>
+          </div>
+          <div class="card-body">
+            <p><strong>Pet:</strong> <%= booking.pet_name %> (<%= booking.pet_species %>)</p>
+            <p><strong>Date and time:</strong> <%= booking.start_time_display %> - <%= booking.end_time_display %></p>
+            <p><strong>Services:</strong></p>
+            <ul>
+              <% if (booking.services.length === 0) { %>
+                <li>No service details recorded for this booking.</li>
+              <% } else { %>
+                <% booking.services.forEach(service => { %>
+                  <li><%= service.name %> - $<%= Number(service.price).toFixed(2) %> (<%= service.duration %> min)</li>
+                <% }); %>
+              <% } %>
+            </ul>
+            <p><strong>Total:</strong> $<%= Number(booking.price).toFixed(2) %> <span class="badge text-bg-success">Paid</span></p>
+            <a href="/bookings/<%= booking.booking_id %>/confirmation" class="btn btn-sm btn-outline-primary">View confirmation</a>
+          </div>
+        </section>
+      <% }); %>
+    <% } %>
+  </main>
+</body>
+</html>
