@@ -23,6 +23,8 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use(express.json());
+
 app.use('/', authRoutes);
 app.use('/', pageRoutes);
 app.use('/', adminRoutes);
